@@ -13,3 +13,4 @@ Bottleneck==1.3.7
 shioaji==1.2.9
 lxml==6.0.2
 statsmodels==0.14.5
+ta-lib-everywhere
