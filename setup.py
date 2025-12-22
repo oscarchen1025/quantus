@@ -8,7 +8,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'quantus'
-DESCRIPTION = 'Python library for crawling and analyzing Taiwan Stock Market.'
+DESCRIPTION = 'A lightweight library for crawling and analyzing Taiwan Stock Market.'
 URL = 'https://github.com/oscarchen1025/quantus'
 EMAIL = 'oscarchen.1025@gmail.com'
 AUTHOR = 'Andrew'

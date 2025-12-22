@@ -1,2 +1,2 @@
 # Quantus
-Python library for crawling and analyzing Taiwan Stock Market.
+A lightweight library for crawling and analyzing Taiwan Stock Market.
