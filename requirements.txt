@@ -11,4 +11,4 @@ shioaji==1.2.9
 lxml==6.0.2
 statsmodels==0.14.5
 ta-lib-everywhere
-gdown==4.7.1
+gdown==4.6.0
