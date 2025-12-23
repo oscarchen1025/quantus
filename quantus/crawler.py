@@ -16,7 +16,7 @@ def crawl_price(date):
     date_str_format = pd.to_datetime(date).strftime('%Y%m%d')
 
     # TWSE
-    url = "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=%s&type=ALL&response=json"%(date_str_format)
+    url = "https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=%s&type=ALLBUT0999&response=json"%(date_str_format)
     r = requests.get(url)
 
     if '沒有符合' in r.json()['stat']:
