@@ -68,7 +68,7 @@ def auto_update(update_dates:list=None):
     dates = pd.date_range(db.get('成交股數').index[-1],'now')
 
     if isinstance(update_dates,list):
-        dates += update_dates
+        dates = update_dates + dates
 
     for date in tqdm(dates,desc='crawling',file=sys.stdout):
 
