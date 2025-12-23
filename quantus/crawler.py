@@ -1,6 +1,9 @@
 import requests
 import pandas as pd
 import numpy as np
+from tqdm import tqdm
+import sys
+import time
 
 from quantus.database import DataBase
 
@@ -57,4 +60,27 @@ def crawl_price(date):
         dfs['date'] = pd.to_datetime(date)
         dfs = dfs.mask(dfs == 0,np.nan)
 
-        return dfs
+    return dfs
+
+
+def auto_update():
+
+    dates = pd.date_range(db.get('成交股數').index[-1],'now')
+
+    for date in tqdm(dates,desc='crawling',file=sys.stdout):
+
+        df = crawl_price(date)
+
+        if df.empty:
+            tqdm.write(f"{date.strftime('%Y-%m-%d')} ... fail")
+        else:
+            for file_name in df.columns.drop(['證券代號','date']):
+
+                old = db.get(file_name)
+                new = df.pivot_table(file_name,'date','證券代號')
+                dfs = pd.concat([old,new]).groupby(level=0).nth[-1].sort_index().sort_index(axis=1)
+                dfs.to_pickle(f"{db.path}/{file_name}.pickle")
+
+            tqdm.write(f"{date.strftime('%Y-%m-%d')} ... success")
+
+        time.sleep(2)
