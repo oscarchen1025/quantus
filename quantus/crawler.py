@@ -65,10 +65,10 @@ def crawl_price(date):
 
 def auto_update(update_dates:list=None):
 
-    dates = pd.date_range(db.get('成交股數').index[-1],'now')
+    dates = pd.date_range(db.get('成交股數').index[-1],'now').tolist()
 
     if isinstance(update_dates,list):
-        dates = update_dates + dates
+        dates = pd.to_datetime(update_dates).tolist() + dates
 
     for date in tqdm(dates,desc='crawling',file=sys.stdout):
 
