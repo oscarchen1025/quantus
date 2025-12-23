@@ -4,7 +4,7 @@ seaborn
 plotly
 yfinance==0.2.66
 pandas==2.2.2
-numpy==2.0.2
+numpy==1.26.4
 schedule
 shioaji==1.2.9
 lxml==6.0.2
