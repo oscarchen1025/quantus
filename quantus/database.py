@@ -24,13 +24,17 @@ class DataBase:
 
         return os.path.exists(f"{self.path}/{file_name}.pickle")
 
-    def get(self,file_name):
+    def get(self,file_name,exclude_etf=False):
 
-        return pd.read_pickle(f"{self.path}/{file_name}.pickle")
+        df = pd.read_pickle(f"{self.path}/{file_name}.pickle")
+
+        if exclude_etf:
+            df = df[[sid for sid in df.columns if len(sid) == 4]]
+
+        return df
 
     def get_klines(self,stock_id):
 
         ohlcv = pd.DataFrame({name:self.get(fname)[stock_id] for name,fname in [('close','收盤價'),('open','開盤價'),('high','最高價'),('low','最低價'),('volume','成交股數')]})
 
         return ohlcv
-
