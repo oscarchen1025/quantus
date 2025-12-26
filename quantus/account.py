@@ -40,10 +40,13 @@ class Account:
         stock_ids = stock_ids or db.get('收盤價',exclude_etf=True).tail(200).dropna(how='all',axis=1).columns
 
         contracts = [self.api.Contracts.Stocks[stock_id] for stock_id in stock_ids]
-        snapshots = self.api.snapshots([contract for contract in contracts if contract is not None])
+        contracts = [contract for contract in contracts if contract is not None]
+        snapshots = self.api.snapshots(contracts)
 
-        df = pd.DataFrame(s.__dict__ for s in snapshots)
+        info = pd.DataFrame(s.__dict__ for s in contracts).set_index('code')
+        df = pd.DataFrame(s.__dict__ for s in snapshots).set_index('code')
+        
         df['ts'] = pd.to_datetime(df['ts'])
-        df = df.rename(columns={'code':'證券代號'})
+        df.insert(0,'name',info['name'])
 
         return df
