@@ -11,7 +11,7 @@ class Account:
         self.api = api
         self.accounts = accounts
 
-    def testing(self):
+    def api_testing(self):
 
         if self.api.simulation:
 
