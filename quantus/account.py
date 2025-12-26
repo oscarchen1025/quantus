@@ -45,8 +45,21 @@ class Account:
 
         info = pd.DataFrame(s.__dict__ for s in contracts).set_index('code')
         df = pd.DataFrame(s.__dict__ for s in snapshots).set_index('code')
-        
+
         df['ts'] = pd.to_datetime(df['ts'])
         df.insert(0,'name',info['name'])
 
         return df
+
+    def get_realtime_data(self):
+
+        df = self.get_snapshot_data()
+        df['date'] = pd.to_datetime(df['ts'].apply(lambda s:s.strftime('%Y-%m-%d')))
+        df['volume'] = df['total_volume'] * 1000
+
+        stocks = {}
+        for name,file_name in [('close','收盤價'),('open','開盤價'),('high','最高價'),('low','最低價'),('volume','成交股數')]:
+            
+            stocks[name] = pd.concat([db.get(file_name,exclude_etf=True),df.pivot_table(name,'date',df.index).iloc[[-1]]]).groupby(level=0).nth[-1]
+
+        return stocks
