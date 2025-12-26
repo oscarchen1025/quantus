@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import gdown
+import inspect
 
 from quantus import COLAB_ENV,CONNECTED,DB_PATH
 
@@ -20,13 +21,20 @@ class DataBase:
 
         self.path = DB_PATH
 
-    def exists(self,file_name):
+    def get_(self,file_name):
 
-        return os.path.exists(f"{self.path}/{file_name}.pickle")
+        return pd.read_pickle(f"{self.path}/{file_name}.pickle")
 
     def get(self,file_name,exclude_etf=False):
 
-        df = pd.read_pickle(f"{self.path}/{file_name}.pickle")
+        current_frame = inspect.currentframe().f_back
+        current_globals = current_frame.f_globals
+
+        if file_name in current_globals.keys():
+            df = current_globals[file_name]
+        else:
+            df = self.get_(file_name)
+            current_globals[file_name] = df
 
         if exclude_etf:
             df = df[[sid for sid in df.columns if len(sid) == 4]]

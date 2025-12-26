@@ -65,7 +65,7 @@ def crawl_price(date):
 
 def auto_update(update_dates:list=None):
 
-    dates = pd.date_range(db.get('成交股數').index[-1],'now').tolist()
+    dates = pd.date_range(db.get_('成交股數').index[-1],'now').tolist()
 
     if isinstance(update_dates,list):
         dates = pd.to_datetime(update_dates).tolist() + dates
@@ -79,7 +79,7 @@ def auto_update(update_dates:list=None):
         else:
             for file_name in df.columns.drop(['證券代號','date']):
 
-                old = db.get(file_name)
+                old = db.get_(file_name)
                 new = df.pivot_table(file_name,'date','證券代號')
                 dfs = pd.concat([old,new]).groupby(level=0).nth[-1].sort_index().sort_index(axis=1)
                 dfs.to_pickle(f"{db.path}/{file_name}.pickle")
