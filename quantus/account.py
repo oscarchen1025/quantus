@@ -9,7 +9,7 @@ db = DataBase()
 
 class Account:
 
-    def __init__(self,api_key,secret_key,simulation=False):
+    def __init__(self,api_key,secret_key,simulation=True):
 
         api = sj.Shioaji(simulation)
         accounts = api.login(api_key,secret_key)
