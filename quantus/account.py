@@ -26,7 +26,7 @@ class Account:
 
             order = sj.order.StockOrder(
                 action='Buy',
-                price=contract.limit_down,
+                price=contract.reference,
                 quantity=1,
                 price_type='LMT',
                 order_type='ROD',
@@ -83,8 +83,8 @@ class Account:
 
         display(
             df.style
-            .bar(color=['#049981c3','#cd323fc3'],width=100,height=20,align='zero',subset=['change_rate','kbar_rate','1week','1month','1year','ytd'])
-            .bar(color=['#049981','#3b8ae8'],width=50,height=25,align='zero',subset=['volume_ratio'])
+            .bar(color=['#049981c3','#cd323fc3'],width=60,height=20,align='zero',subset=['change_rate','kbar_rate','1week','1month','1year','ytd'])
+            .bar(color=['#049981','#3b8ae8'],width=60,height=25,align='zero',subset=['volume_ratio'])
             .format(lambda s:str(round(s,2)) + ' %',subset=['change_rate','kbar_rate','volume_ratio','1week','1month','1year','ytd'])
             .format(lambda s:s,subset=['close','total_volume'])
         )
