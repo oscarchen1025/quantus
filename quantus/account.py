@@ -1,5 +1,6 @@
 import shioaji as sj
 import pandas as pd
+from IPython.display import display
 
 from quantus.database import DataBase
 
@@ -63,3 +64,24 @@ class Account:
             stocks[name] = pd.concat([db.get(file_name,exclude_etf=True),df.pivot_table(name,'date',df.index).iloc[[-1]]]).groupby(level=0).nth[-1]
 
         return stocks
+
+    def display_stocks_info(self,conditions):
+
+        stock_ids = conditions.iloc[-1][conditions.iloc[-1]].index.tolist()
+
+        df = self.get_snapshot_data(stock_ids)[['name','close','total_volume','change_rate','volume_ratio']]
+
+        for n,col in [(5,'week'),(20,'month'),(240,'year')]:
+            
+            close = db.get('收盤價')[stock_ids]
+            df[f"1{col}"] = round(close.pipe(lambda s:s / s.shift(n) - 1).iloc[-1] * 100,2)
+
+        df['ytd'] = round(close.loc[str(close.index.year[-1])].pipe(lambda s:s.iloc[-1] / s.iloc[0] - 1) * 100,2)
+
+        display(
+            df.style
+            .bar(color=['#049981','#cd323f'],width=50,height=25,subset=['change_rate','1week','1month','1year','ytd'])
+            .bar(color=['#049981','#3b8ae8'],width=50,height=25,subset=['volume_ratio'])
+            .format(lambda s:str(round(s,2)) + ' %',subset=['change_rate','volume_ratio','1week','1month','1year','ytd'])
+            .format(lambda s:s,subset=['close','total_volume'])
+        )
