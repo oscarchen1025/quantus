@@ -69,7 +69,10 @@ class Account:
 
         stock_ids = conditions.iloc[-1][conditions.iloc[-1]].index.tolist()
 
-        df = self.get_snapshot_data(stock_ids)[['name','close','total_volume','change_rate','volume_ratio']]
+        df = self.get_snapshot_data(stock_ids)
+
+        df['kbar_rate'] = round((df['close'] / df['open'] - 1) * 100,2)
+        df = df[['name','close','total_volume','change_rate','volume_ratio','kbar_rate']]
 
         for n,col in [(5,'week'),(20,'month'),(240,'year')]:
             
@@ -80,8 +83,8 @@ class Account:
 
         display(
             df.style
-            .bar(color=['#049981','#cd323f'],width=50,height=25,subset=['change_rate','1week','1month','1year','ytd'])
+            .bar(color=['#049981','#cd323f'],width=50,height=25,subset=['change_rate','kbar_rate','1week','1month','1year','ytd'])
             .bar(color=['#049981','#3b8ae8'],width=50,height=25,subset=['volume_ratio'])
-            .format(lambda s:str(round(s,2)) + ' %',subset=['change_rate','volume_ratio','1week','1month','1year','ytd'])
+            .format(lambda s:str(round(s,2)) + ' %',subset=['change_rate','kbar_rate','volume_ratio','1week','1month','1year','ytd'])
             .format(lambda s:s,subset=['close','total_volume'])
         )
